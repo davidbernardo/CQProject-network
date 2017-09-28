@@ -1,0 +1,175 @@
+service password-encryption
+!
+hostname CORE
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$g/EF$GGyyXu3.V9OqHXtFJQjl/.
+!
+no aaa new-model
+system mtu routing 1500
+ip subnet-zero
+ip routing
+no ip domain-lookup
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-3208173952
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3208173952
+ revocation-check none
+ rsakeypair TP-self-signed-3208173952
+!
+!
+crypto pki certificate chain TP-self-signed-3208173952
+ certificate self-signed 01
+  3082023D 308201A6 A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 33323038 31373339 3532301E 170D3933 30333031 30303031
+  31325A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 32303831
+  37333935 3230819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100AD90 60A4CE6F 8026F2A6 EAED0928 21CEFDCE 700726EB 85AA8128 32C0881D
+  9C90EB6F ABE27763 287D5ABC 23DD0C35 A645198A 3B5846E6 985EEE80 D8D68013
+  1E82D5EF A680CFFC 9FE873BC E2BBD9FF CA63C70B E5A303EA 6FE6FBA0 439D350C
+  B0799E64 24D5B3BD 9F574A75 135CA451 C5892733 A24FB468 EC4D5125 A158DBAD
+  56170203 010001A3 65306330 0F060355 1D130101 FF040530 030101FF 30100603
+  551D1104 09300782 05434F52 452E301F 0603551D 23041830 1680140D ADFFC404
+  77D92857 B4014111 237FF98B 8F619F30 1D060355 1D0E0416 04140DAD FFC40477
+  D92857B4 01411123 7FF98B8F 619F300D 06092A86 4886F70D 01010405 00038181
+  000E0297 BEA62BE9 1384C552 D07799AA 38EE40B5 8E803463 7924E797 A2AA888A
+  33F0ED89 CBA3DB0B 3EDCAA07 CFE482C1 D9675DC9 5EC8B52E 015CF8B8 9AB303FA
+  7E014549 CB99DBCA 20D62035 0C3D097C 5FFA333B D12726D1 4B357923 F1002387
+  7E94C2DC DDDA53BE 38355830 9173691C 40070E16 D2BF5F89 50E02105 F52259B9 22
+  quit
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+interface Loopback0
+ ip address 172.16.3.1 255.255.255.0
+!
+interface FastEthernet0/1
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/2
+ switchport access vlan 200
+ switchport mode access
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+ no switchport
+ no ip address
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+ switchport access vlan 101
+ switchport mode access
+!
+interface FastEthernet0/20
+ switchport access vlan 110
+ switchport mode access
+!
+interface FastEthernet0/21
+ switchport mode access
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+ switchport access vlan 110
+ switchport mode access
+!
+interface FastEthernet0/24
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface vlan 100
+ ip address 192.168.3.2 255.255.255.0
+!
+interface vlan 200
+ ip address 192.168.2.1 255.255.255.0
+!
+interface Vlan101
+ ip address 192.168.101.1 255.255.255.0
+ ip helper-address 192.168.10.110
+!
+interface Vlan110
+ ip address 192.168.10.1 255.255.255.0
+!
+router ospf 300
+ log-adjacency-changes
+ network 172.16.3.0 0.0.0.255 area 0
+ network 192.168.2.0 0.0.0.255 area 0
+ network 192.168.3.0 0.0.0.255 area 0
+ network 192.168.10.0 0.0.0.255 area 1
+ network 192.168.101.0 0.0.0.255 area 1
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+!
+!
+control-plane
+!
+banner motd ^CCCCEquipamento protegido, utilizado para CQProject^C
+!
+line con 0
+ password 7 13061E010803
+ login
+line vty 0 4
+ password 7 13061E010803
+ login
+line vty 5 15
+ login
+!
+end

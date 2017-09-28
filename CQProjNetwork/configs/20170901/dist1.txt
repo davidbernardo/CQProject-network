@@ -1,0 +1,192 @@
+service password-encryption
+!
+hostname DIST_1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$OELD$3.4MdQDyDUopREeQ9gJCg/
+!
+!
+!
+no aaa new-model
+system mtu routing 1500
+ip routing
+no ip domain-lookup
+!
+ip dhcp pool 101
+   network 192.168.101.0 255.255.255.0
+   default-router 192.168.101.1
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-3208178688
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3208178688
+ revocation-check none
+ rsakeypair TP-self-signed-3208178688
+!
+!
+crypto pki certificate chain TP-self-signed-3208178688
+ certificate self-signed 01
+  3082023F 308201A8 A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 33323038 31373836 3838301E 170D3933 30333031 30303332
+  33305A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 32303831
+  37383638 3830819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100C172 1B5B0F98 28186A4E 44396B59 0AC5239A 5257A00E 569436B6 CF55DB14
+  D110861A 00C22F0B E628AB24 3AA041BA A6BC7B2F E0C4A18E 693E108C 419513C5
+  E563C0FE 565BB029 496F5367 2B3CBA1D 492D5740 F87AC003 A031042F 47D5593C
+  01B3CD96 68B17F13 F401E195 E63B0885 B809A426 AAEEA545 3F821A80 CBAACAC5
+  F0A90203 010001A3 67306530 0F060355 1D130101 FF040530 030101FF 30120603
+  551D1104 0B300982 07444953 545F312E 301F0603 551D2304 18301680 146C0B34
+  741D8F7A A835D423 EFB75832 202BA9E6 56301D06 03551D0E 04160414 6C0B3474
+  1D8F7AA8 35D423EF B7583220 2BA9E656 300D0609 2A864886 F70D0101 04050003
+  8181000F 5A7D3E1B 936D570F 61D68C4D FBE38C4C 1AB691EE 03CEB22C 8CBFF448
+  F8F92982 76F57CD8 B9BE22D4 B94C06E2 133D7315 F93AD1C3 983EDD26 5E305979
+  E8E0FCB9 6B61837F 508CF776 435CFC73 8C0A7932 1915B2B4 75704849 D3D7A076
+  8AA16828 1C3BFD45 244BA3B5 EE5E1127 71C84819 56D46A75 41CE40AC 781DB1F2 8B3F4D
+  quit
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+interface Loopback0
+ ip address 172.16.1.1 255.255.255.0
+!
+interface Port-channel11
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 11,21,101
+ switchport mode trunk
+!
+interface Port-channel12
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 11,21,101
+ switchport mode trunk
+!
+interface Port-channel24
+ no switchport
+ ip address 10.1.0.22 255.255.0.0
+ standby 2 ip 10.1.0.1
+ standby 2 priority 105
+ standby 2 preempt
+ standby 3 ip 10.1.0.2
+ standby 3 priority 110
+ standby 3 preempt
+!
+interface FastEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 11,21,101
+ switchport mode trunk
+ channel-group 11 mode active
+!
+interface FastEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 11,21,101
+ switchport mode trunk
+ channel-group 11 mode active
+!
+interface FastEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 11,21,101
+ switchport mode trunk
+ channel-group 12 mode active
+!
+interface FastEthernet0/4
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 11,21,101
+ switchport mode trunk
+ channel-group 12 mode active
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+ no switchport
+ ip address 192.168.2.2 255.255.255.0
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+ no switchport
+ no ip address
+ channel-group 24 mode desirable
+!
+interface FastEthernet0/24
+ no switchport
+ no ip address
+ channel-group 24 mode desirable
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan101
+ ip address 192.168.101.1 255.255.255.0
+!
+router ospf 100
+ log-adjacency-changes
+ network 192.168.2.2 0.0.0.0 area 0
+ network 192.168.101.1 0.0.0.0 area 0
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+!
+!
+banner motd ^CCCCEquipamento protegido, utilizado para CQProject^C
+!
+line con 0
+ password 7 104D000A0618
+ login
+line vty 0 4
+ password 7 104D000A0618
+ login
+line vty 5 15
+ login
+!
+end

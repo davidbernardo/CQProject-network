@@ -1,0 +1,186 @@
+service password-encryption
+!
+hostname DIST_2
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$FvmA$WolSD.44K76PKQlE75Dah1
+!
+!
+!
+no aaa new-model
+system mtu routing 1500
+ip routing
+no ip domain-lookup
+!
+!
+!
+!
+crypto pki trustpoint TP-self-signed-3205493376
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-3205493376
+ revocation-check none
+ rsakeypair TP-self-signed-3205493376
+!
+!
+crypto pki certificate chain TP-self-signed-3205493376
+ certificate self-signed 01
+  3082023F 308201A8 A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 33323035 34393333 3736301E 170D3933 30333031 30303333
+  33375A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D33 32303534
+  39333337 3630819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100C4C4 9758891E D922845B C6C9CEA8 3685447F B8C9DD89 BF41010D AD76C9E6
+  871DDDBF 24D91218 7561DE7E A7EA17AA 920545AD 745CCCA8 6EF1580A 2E6E3754
+  36E6BE49 C370E553 BD4533D6 36FC06D1 480EBD96 99C573E6 04C02E64 BA4D65BF
+  E734299C 8DEEFFE2 EAB59170 C7CC63F8 C37E191C 08699BE7 4742926D C615C8A6
+  5B6B0203 010001A3 67306530 0F060355 1D130101 FF040530 030101FF 30120603
+  551D1104 0B300982 07444953 545F322E 301F0603 551D2304 18301680 1490E64C
+  131BAC33 4F92B1E0 CBE9C999 3A263628 3E301D06 03551D0E 04160414 90E64C13
+  1BAC334F 92B1E0CB E9C9993A 2636283E 300D0609 2A864886 F70D0101 04050003
+  818100B3 980D1AEA 3CAA877D D52D2CD0 5F5D563A 4160783D 064A4638 D3BA6692
+  C6B5F980 288ECB8B 8028FB1F 65BDDA1E 661B5551 3388BFCB 7036AEC1 CD316F47
+  6523FE56 63E19C69 64D3B754 726D400D 5051F586 07962400 71BF13B7 EF5D17A1
+  2459291D 438E4EC5 0F6BB02A DA3FAA00 ABC6F48B 8248EB5E 7270A08D 414591B2 B03912
+  quit
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+interface Loopback0
+ ip address 172.16.2.1 255.255.255.0
+!
+interface Port-channel21
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel22
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Port-channel24
+ no switchport
+ ip address 10.1.0.21 255.255.0.0
+ standby 2 ip 10.1.0.1
+ standby 2 priority 110
+ standby 2 preempt
+!
+interface FastEthernet0/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 21 mode active
+!
+interface FastEthernet0/2
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 21 mode active
+!
+interface FastEthernet0/3
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 22 mode active
+!
+interface FastEthernet0/4
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 22 mode active
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+ switchport access vlan 100
+ switchport mode access
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+ switchport access vlan 101
+ switchport mode access
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+ no switchport
+ no ip address
+ channel-group 24 mode auto
+!
+interface FastEthernet0/24
+ no switchport
+ no ip address
+ channel-group 24 mode auto
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan100
+ ip address 192.168.3.1 255.255.255.0
+!
+router ospf 200
+ log-adjacency-changes
+ network 172.16.2.0 0.0.0.255 area 0
+ network 192.168.3.0 0.0.0.255 area 0
+ network 192.168.101.0 0.0.0.255 area 0
+!
+ip classless
+ip http server
+ip http secure-server
+!
+!
+!
+!
+banner motd ^CCCCCEquipamento protegido, utilizado para CQProject^C
+!
+line con 0
+ password 7 00071A150754
+ login
+line vty 0 4
+ password 7 00071A150754
+ login
+line vty 5 15
+ login
+!
+end

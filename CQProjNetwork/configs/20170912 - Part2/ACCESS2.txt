@@ -1,0 +1,153 @@
+
+no service password-encryption
+!
+hostname Access2
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 5 $1$jbal$JhqvCgaqZ8ijF8Fkib.r30
+!
+!
+!
+no aaa new-model
+system mtu routing 1500
+!
+!
+no ip domain-lookup
+!
+!
+crypto pki trustpoint TP-self-signed-1021394816
+ enrollment selfsigned
+ subject-name cn=IOS-Self-Signed-Certificate-1021394816
+ revocation-check none
+ rsakeypair TP-self-signed-1021394816
+!
+!
+crypto pki certificate chain TP-self-signed-1021394816
+ certificate self-signed 01
+  30820240 308201A9 A0030201 02020101 300D0609 2A864886 F70D0101 04050030
+  31312F30 2D060355 04031326 494F532D 53656C66 2D536967 6E65642D 43657274
+  69666963 6174652D 31303231 33393438 3136301E 170D3933 30333031 30313139
+  34345A17 0D323030 31303130 30303030 305A3031 312F302D 06035504 03132649
+  4F532D53 656C662D 5369676E 65642D43 65727469 66696361 74652D31 30323133
+  39343831 3630819F 300D0609 2A864886 F70D0101 01050003 818D0030 81890281
+  8100C75A 3707B265 8E1BB10D 7E247A4A B25184EC 77CD06FA 8FCE8B3E 90CDDAD1
+  617C523E E2505077 5B80A68B 85B5F3E8 1053BDDE 553F3B9F D1A1F824 D121AE31
+  9B223831 FDC33A16 1B6BB4E4 1654D8E1 3B3D2242 C74F7C1F B7415AC4 4772E0BE
+  22D6CC0A 65BD13AF 1F94C92A 48CA45C7 AF7B7F0E 8390EB48 705141F1 D72D7455
+  1A3D0203 010001A3 68306630 0F060355 1D130101 FF040530 030101FF 30130603
+  551D1104 0C300A82 08416363 65737332 2E301F06 03551D23 04183016 8014CF9A
+  CE2925EE 14C8C461 9DB2526B 7B68B0BD C0FF301D 0603551D 0E041604 14CF9ACE
+  2925EE14 C8C4619D B2526B7B 68B0BDC0 FF300D06 092A8648 86F70D01 01040500
+  03818100 11D08230 5A842CAF D62114CC 3476A615 62745526 4E03BA79 CF1A5999
+  EEE52B82 0C7DE23B 77E57794 2B033321 4E03666B D1374AEE 5B8FD6CD 5F97D65C
+  66C5BB0F 92BB9536 8267E8FE 6B930902 6DB6CEEE 8793B616 1227DD24 A356B891
+  744E1B6D 1EDB670C F7E885D5 8C989560 2665D489 7544D9C7 CDEC184C B5BCF70A D8798907
+  quit
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+interface Port-channel1
+ description distribution2
+ switchport mode trunk
+!
+interface Port-channel2
+ switchport mode trunk
+!
+interface FastEthernet0/1
+ description distribution2
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface FastEthernet0/2
+ description distribution2
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 1 mode active
+!
+interface FastEthernet0/3
+ description distribution1
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 2 mode active
+!
+interface FastEthernet0/4
+ description distribution1
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 2 mode active
+!
+interface FastEthernet0/5
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+ switchport access vlan 101
+ switchport mode access
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+ switchport mode trunk
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+! 
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip http server
+ip http secure-server
+!
+line con 0
+ password cqproject
+ login
+line vty 0 4
+ password cqproject
+ login
+line vty 5 15
+ login
+!
+end
+
